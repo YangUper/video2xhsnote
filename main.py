@@ -1,6 +1,15 @@
 import os
-import time
-from tasks import process_video_task
+from celery import group, chain
+from process_steps import extract_audio, audio2text, vision_comprehension, generate_note
+
+from celery import Celery
+
+app = Celery(
+    'video_tasks',
+    broker='redis://127.0.0.1:6379/0',
+    backend='redis://127.0.0.1:6379/1',
+    result_expires=3600
+)
 
 def main():
     file_paths = []
@@ -16,18 +25,22 @@ def main():
         file_paths.append(file_path)
         file_path = input('请输入需要处理视频的完整路径（结束请输入"ok"）:')
 
-    tasks_list = [process_video_task.delay(f) for f in file_paths]
+    # 提交任务组并等待结果
+    tasks_group = group(
+        chain(
+            extract_audio.s({'video_path': f, 'vision_prompt': '描述这张图片', 'output_dir': './notes'}),
+            audio2text.s(),
+            vision_comprehension.s(),
+            generate_note.s()
+        ) for f in file_paths
+    )
+
+    result = tasks_group.apply_async()  # 使用apply_async提交任务组
     print('所有任务已提交')
 
-    # 轮询每个任务是否完成
-    unfinished_tasks = tasks_list.copy()
-    while unfinished_tasks:
-        for task in unfinished_tasks[:]:
-            if task.ready():
-                result = task.get()
-                print(f'任务{task.id}已经完成，结果：{result}')
-                unfinished_tasks.remove(task)
-        time.sleep(0.5)
+    # 等待所有任务完成
+    result.join()
+    print('所有任务已完成')
 
 
 if __name__ == '__main__':

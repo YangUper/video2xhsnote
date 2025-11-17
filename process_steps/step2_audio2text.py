@@ -2,10 +2,14 @@ from celery import shared_task
 import whisper
 
 download_dir = "E:/Project/video2xhsnote/whisper_models"
-audio2text_model = whisper.load_model('small', device='cuda', download_root=download_dir)
+
+def get_audio2text_model():
+    audio2text_model = whisper.load_model('small', device='cuda', download_root=download_dir)
+    return audio2text_model
 
 @shared_task
 def audio2text(config_dic):
+    audio2text_model = get_audio2text_model()
     audio_path = config_dic.get('audio_path')
     print(f'开始识别音频：{audio_path}')
     result = audio2text_model.transcribe(audio_path, language='zh')
@@ -17,7 +21,7 @@ def audio2text(config_dic):
         text += segment['text'] + '。'
 
     config_dic['text'] = text
-    print('识别音频完成')
+    print(f'识别音频完成 {audio_path}')
     return config_dic
 
 

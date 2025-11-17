@@ -43,7 +43,7 @@ def vision_inference(image_b64, vision_prompt):
 def vision_comprehension(config_dic):
     video_path = config_dic.get('video_path')
     vision_prompt = config_dic.get('vision_prompt')
-
+    print(f'开始抽取 {video_path} 的图片理解')
     # 抽帧
     frames_b64 = extract_frames(video_path)
 
@@ -56,9 +56,10 @@ def vision_comprehension(config_dic):
             'frame_index': idx,
             'description': desc
         })
-        print(desc)
+        # print(desc)
     config_dic['vision_desc'] = results
     # print(results)
+    print(f'完成 {video_path} 的图片理解')
     return config_dic
 
 

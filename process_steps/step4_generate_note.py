@@ -1,8 +1,25 @@
 from celery import shared_task
 import ollama
+import os
+
+def save_note_as_md(config_dic):
+    print(f'开始保存 {config_dic["video_path"]} 的笔记')
+    output_dir = config_dic.get('output_dir')
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 生成文件名：使用视频名
+    video_name = os.path.basename(config_dic['video_path']).rsplit('.', 1)[0]
+    md_path = os.path.join(output_dir, f"{video_name}.md")
+
+    # 写入内容
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write(config_dic['note'])
+
+    print(f"已保存笔记到 {md_path}")
 
 @shared_task
 def generate_note(config_dic):
+    print(f'开始生成 {config_dic["video_path"]} 的小红书文案')
     text = config_dic.get('text')
     vision_desc = config_dic.get('vision_desc')
     vision_desc_processed = ['第' + str(i['frame_index']) + '帧画面:' + i['description'] for i in vision_desc]
@@ -18,7 +35,7 @@ def generate_note(config_dic):
     以下是音频识别出的事件内容：
     {text}
 
-    请你将以上内容融合，生成一篇符合音频和视频内容的小红书笔记，并给我一个标题。
+    请你将以上内容融合，给我一个标题，并且生成一篇符合音频和视频内容的小红书笔记。
 
     要求：
     1. 使用口语化、自然、有代入感的风格。
@@ -38,7 +55,9 @@ def generate_note(config_dic):
     )
     note = res['message']['content']
     config_dic['note'] = note
-    print(note)
+    # print(note)
+    print(f'完成 {config_dic["video_path"]} 的小红书文案')
+    save_note_as_md(config_dic)
     return config_dic
 
 

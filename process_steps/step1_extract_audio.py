@@ -5,11 +5,11 @@ import subprocess
 @shared_task
 def extract_audio(config_dic):
     video_path = config_dic.get('video_path')
-    output_dir = '../audio'
+    output_dir = './audio'
     os.makedirs(output_dir, exist_ok=True)
-    output_audio = os.path.abspath(os.path.join('../audio', os.path.basename(video_path).rsplit('.', 1)[0] + ".wav"))
-    config_dic['output_audio'] = output_audio
-    print(f'开始提取音频，音频存放于:{output_audio}')
+    audio_path = os.path.abspath(os.path.join(output_dir, os.path.basename(video_path).rsplit('.', 1)[0] + ".wav"))
+    config_dic['audio_path'] = audio_path
+    print(f'开始提取音频 {video_path}')
     command = [
         "ffmpeg",
         "-i", video_path,
@@ -17,12 +17,12 @@ def extract_audio(config_dic):
         "-acodec", "pcm_s16le",  # 无损 wav
         "-ar", "16000",  # ASR 标准采样率
         "-ac", "1",  # 单声道（识别更稳）
-        output_audio
+        audio_path
     ]
 
     # 执行ffmpeg
     subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print('提取音频完成')
+    print(f'提取 {video_path} 音频完成, ，音频存放于:{audio_path}')
     return config_dic
 
 if __name__ == '__main__':
