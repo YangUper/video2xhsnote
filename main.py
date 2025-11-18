@@ -1,7 +1,7 @@
 import os
 from celery import group, chain
 from process_steps import extract_audio, audio2text, vision_comprehension, generate_note
-from config import output_dir, audio_dir, vision_prompt
+from config import output_dir, audio_dir, vision_prompt, interval, vision_model, generate_model
 from celery import Celery
 
 app = Celery(
@@ -10,6 +10,7 @@ app = Celery(
     backend='redis://127.0.0.1:6379/1',
     result_expires=3600
 )
+
 
 def main():
     file_paths = []
@@ -28,7 +29,17 @@ def main():
     # 提交任务组并等待结果
     tasks_group = group(
         chain(
-            extract_audio.s({'video_path': f, 'vision_prompt': vision_prompt, 'output_dir': output_dir, 'audio_dir': audio_dir}),
+            extract_audio.s(
+                {
+                    'video_path': f,
+                    'vision_prompt': vision_prompt,
+                    'output_dir': output_dir,
+                    'audio_dir': audio_dir,
+                    'interval': interval,
+                    'vision_model': vision_model,
+                    'generate_model': generate_model
+                }
+            ),
             audio2text.s(),
             vision_comprehension.s(),
             generate_note.s()

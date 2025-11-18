@@ -9,7 +9,7 @@ def frame2base64(frame):
     return base64.b64encode(buffer).decode('utf-8')
 
 
-def extract_frames(video_path, interval=500):
+def extract_frames(video_path, interval):
     cap = cv2.VideoCapture(video_path)
     count = 0
     frames_b64 = []
@@ -25,9 +25,9 @@ def extract_frames(video_path, interval=500):
     return frames_b64
 
 
-def vision_inference(image_b64, vision_prompt):
+def vision_inference(image_b64, vision_prompt, config_dic):
     res = ollama.chat(
-        model="qwen3-vl:2b",
+        model=config_dic.get('vision_model'),
         messages=[
             {
                 "role": "user",
@@ -45,13 +45,13 @@ def vision_comprehension(config_dic):
     vision_prompt = config_dic.get('vision_prompt')
     print(f'开始抽取 {video_path} 的图片理解')
     # 抽帧
-    frames_b64 = extract_frames(video_path)
+    frames_b64 = extract_frames(video_path, config_dic.get('interval'))
 
     results = []
     # 每一帧送入模型
     for idx, img_b64 in enumerate(frames_b64):
         print(f"Processing frame {idx + 1}/{len(frames_b64)}")
-        desc = vision_inference(img_b64, vision_prompt)
+        desc = vision_inference(img_b64, vision_prompt, config_dic)
         results.append({
             'frame_index': idx,
             'description': desc

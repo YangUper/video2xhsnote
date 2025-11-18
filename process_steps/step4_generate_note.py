@@ -35,7 +35,7 @@ def generate_note(config_dic):
     以下是音频识别出的事件内容：
     {text}
 
-    请你将以上内容融合，给我一个标题，并且生成一篇符合音频和视频内容的小红书笔记。
+    请你将以上内容融合，给我一个标题，并且生成一篇符合音频和视频内容的小红书笔记，并且以markdown的形式给我。
 
     要求：
     1. 使用口语化、自然、有代入感的风格。
@@ -45,7 +45,7 @@ def generate_note(config_dic):
     """
 
     res = ollama.chat(
-        model='deepseek-r1:8b',
+        model=config_dic.get('generate_model'),
         messages=[
             {
                 'role': 'user',

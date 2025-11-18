@@ -12,3 +12,9 @@ vision_prompt = """
     5. 可以推断的场景语义或可能发生的事件  
     请尽量客观、简洁、结构化地描述画面。
 """
+# 视频抽帧间隔，数值越小，抽帧数量越多，处理时间越长
+interval = 500
+# 视觉理解模型（注意名称与ollama中一致，使用前先从ollama拉取模型）
+vision_model = 'qwen3-vl:2b'
+# 笔记生成模型（注意名称与ollama中一致，使用前先从ollama拉取模型）
+generate_model = 'deepseek-r1:8b'
