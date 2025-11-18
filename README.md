@@ -109,7 +109,7 @@ conda create -n <虚拟环境名称> python=3.8
 conda activate <虚拟环境名称>
 
 # 安装依赖
-pip install requirements.txt
+pip install -r requirements.txt
 
 # 默认安装的是cpu版本的torch，如果你的电脑有显卡，可以安装GPU版本的torch
 ```
