@@ -31,7 +31,7 @@ networkx==3.5
 numba==0.62.1
 ollama==0.6.1
 openai-whisper==20250625
-opencv-python==4.8.1.78
+opencv-python==4.10.0.84
 packaging==25.0
 pillow==12.0.0
 prompt_toolkit==3.0.52
@@ -58,5 +58,5 @@ wcwidth==0.2.14
 wheel==0.45.1
 zope.event==6.1
 zope.interface==8.1.1
-numpy==1.26.4
+numpy==1.24.4
 # 如果你的电脑有GPU显卡，可以去torch官网下载对应版本的torch，在这里安装openai-whisper是默认会安装cpu版本的torch
