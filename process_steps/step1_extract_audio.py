@@ -5,9 +5,9 @@ import subprocess
 @shared_task
 def extract_audio(config_dic):
     video_path = config_dic.get('video_path')
-    output_dir = './audio'
-    os.makedirs(output_dir, exist_ok=True)
-    audio_path = os.path.abspath(os.path.join(output_dir, os.path.basename(video_path).rsplit('.', 1)[0] + ".wav"))
+    audio_dir = config_dic.get('audio_dir')
+    os.makedirs(audio_dir, exist_ok=True)
+    audio_path = os.path.abspath(os.path.join(audio_dir, os.path.basename(video_path).rsplit('.', 1)[0] + ".wav"))
     config_dic['audio_path'] = audio_path
     print(f'开始提取音频 {video_path}')
     command = [
