@@ -1,7 +1,7 @@
 import os
 from celery import group, chain
 from process_steps import extract_audio, audio2text, vision_comprehension, generate_note
-from config import output_dir, audio_dir, vision_prompt, interval, vision_model, generate_model
+from config import output_dir, audio_dir, vision_prompt, interval, vision_model, generate_model, device
 from celery import Celery
 
 app = Celery(
@@ -37,7 +37,8 @@ def main():
                     'audio_dir': audio_dir,
                     'interval': interval,
                     'vision_model': vision_model,
-                    'generate_model': generate_model
+                    'generate_model': generate_model,
+                    'device': device
                 }
             ),
             audio2text.s(),

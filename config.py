@@ -18,3 +18,5 @@ interval = 500
 vision_model = 'qwen3-vl:2b'
 # 笔记生成模型（注意名称与ollama中一致，使用前先从ollama拉取模型）
 generate_model = 'deepseek-r1:8b'
+# 有显卡则为"cuda"，否则为"cpu"，mac用户为"mps"
+device = 'cuda'
