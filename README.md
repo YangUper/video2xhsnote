@@ -25,17 +25,20 @@ video2xhsnote/
  |
  |------process_steps/
  |                   |------step1_extract_audio.py 				  # 提取视频中的音频
- |                   |------step2_audio2text.py					# 音频转成文字信息
- |                   |------step3_vision_comprehension.py		   # 视频图像理解
- |                   |------step4_generate_note.py				 # 小红书笔记生成
+ |                   |------step2_audio2text.py					  # 音频转成文字信息
+ |                   |------step3_vision_comprehension.py		  # 视频图像理解
+ |                   |------step4_generate_note.py				  # 小红书笔记生成
  |
- |------config.py										 # 配置文件
- |
- |
- |------main.py										  # 主函数入口
+ |------config.py										 		  # 配置文件
  |
  |
- |------requirements.txt								 # 项目的依赖
+ |------generate_pic.py      									  # 图片生成           				
+ |
+ |
+ |------main.py										  			  # 主函数入口
+ |
+ |
+ |------requirements.txt								 		  # 项目的依赖
 ```
 
 ___
@@ -111,6 +114,9 @@ conda activate <虚拟环境名称>
 # 安装依赖
 pip install -r requirements.txt
 
+# 为playwright安装需要的浏览器，我这里用到了谷歌浏览器
+playwright install chromium
+
 # 默认安装的是cpu版本的torch，如果你的电脑有显卡，可以安装GPU版本的torch
 ```
 
@@ -148,6 +154,8 @@ vision_model = 'qwen3-vl:2b'
 generate_model = 'deepseek-r1:8b'
 # 有显卡则为"cuda"，否则为"cpu"，mac用户为"mps"
 device = 'cuda'
+# 图片生成文件夹
+img_dir = './image'
 
 ```
 
@@ -204,6 +212,16 @@ ___
 ### 3、开始处理
 
 ```
-运行main.py，输入需要处理视频的路径，按照控制台的引导，结束输入'ok'，等待程序结束即可
+运行main.py，输入需要处理视频的路径，按照控制台的引导，结束输入'ok'，等待程序结束即可，最后生成的小红书笔记保存在config.py中你指定的output_dir目录中。
+```
+
+
+
+___
+
+### 4、生成图片
+
+```
+生成图片需执行generate_pic.py，在控制台的指引下与它进行交互就行，最后生成的图片保存在config.py中你指定的img_dir目录中。
 ```
 
