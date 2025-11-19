@@ -60,3 +60,4 @@ zope.event==6.1
 zope.interface==8.1.1
 numpy==1.24.4
 # 如果你的电脑有GPU显卡，可以去torch官网下载对应版本的torch，在这里安装openai-whisper是默认会安装cpu版本的torch
+playwright==1.56.0
