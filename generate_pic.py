@@ -1,10 +1,11 @@
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import time
+from config import img_dir
 
 url = 'https://chat.qwen.ai/'
 storage_file = 'storage.json'
-img_dir = Path('./image')
+img_dir = Path(img_dir)
 
 note_path = input('请选择一篇笔记以生成对应图片（笔记路径）：').strip()
 while not Path(note_path).exists():
@@ -67,18 +68,22 @@ with sync_playwright() as p:
     desc_input = page.get_by_placeholder('描述你想要生成的图像。')
 
     prompt = f"""
-    根据以下小红书笔记内容生成对应场景的真实感图片：
+    根据以下小红书笔记内容生成对应场景的高清真实感图片：
     【笔记内容】
     {note_content}
 
     【图片要求】
-    - 风格：小红书常见的真实生活感、干净自然、治愈系光影
-    - 构图：主体现明显，画面简洁不杂乱，留白适当
-    - 画面氛围：柔和自然光、温柔色调、轻微胶片质感
-    - 背景：真实、不过度虚化，不使用 AI 常见的奇怪结构
-    - 真实生活场景，不要夸张，不要奇幻，不要动漫风，不要抽象风
-    - 元素细节符合现实逻辑（不要多余手指、不要扭曲、不出现乱码文字）
-    - 分辨率：高清 4K
+    - 风格：小红书真实生活感、干净自然、治愈系光影，轻柔自然，温暖色调
+    - 构图：主体突出、画面简洁，留白适当，黄金分割或对角线构图
+    - 光影：柔和自然光、光线均匀，轻微阴影，带微胶片质感
+    - 角度：略微俯拍或平视，真实摄影感
+    - 背景：生活化、真实环境，保持物体比例自然，不虚化过度
+    - 元素细节：手指、物品、文字、纹理等真实合理，不畸形、不扭曲、不出现 AI 错误
+    - 分辨率：超高清 4K，像素细腻
+    - 摄影参数：使用 50mm 或 35mm 镜头效果，浅景深，柔焦
+    - 色彩：柔和自然，不夸张饱和度，温暖柔和，适合小红书视觉风格
+    - 场景氛围：温馨、治愈、舒适，生活化的日常情境
+    - 注意事项：不要出现奇怪结构、AI 特有的扭曲、重复元素或乱码文字
     """
 
     send_btn = page.locator('#send-message-button')

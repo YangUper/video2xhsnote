@@ -20,3 +20,5 @@ vision_model = 'qwen3-vl:2b'
 generate_model = 'deepseek-r1:8b'
 # 有显卡则为"cuda"，否则为"cpu"，mac用户为"mps"
 device = 'cuda'
+# 图片生成文件夹
+img_dir = './image'
