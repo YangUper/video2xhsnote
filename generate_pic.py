@@ -19,7 +19,7 @@ with open(note_path, 'r', encoding='utf-8') as f:
 # print(note_content)
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=False)
 
     if Path(storage_file).exists():
         print('已登录，无需输入用户名和密码')
@@ -27,8 +27,8 @@ with sync_playwright() as p:
         page = context.new_page()
         page.goto(url, wait_until='networkidle')
 
-        login_btn = page.get_by_role(role='button', name='Log in').click()
-        login_with_github_btn = page.get_by_role(role='button', name=' 继续使用 Github 登录')
+        login_btn = page.get_by_role(role='button', name='登录').click()
+        login_with_github_btn = page.get_by_role(role='button', name='继续使用 Github 登录')
         login_with_github_btn.click()
     else:
         print('第一次登录，需要提供用户名和密码')
@@ -36,12 +36,12 @@ with sync_playwright() as p:
         page = context.new_page()
         page.goto(url, wait_until='networkidle')
 
-        login_btn = page.get_by_role(role='button', name='Log in')
+        login_btn = page.get_by_role(role='button', name='登录')
 
         # print(login_btn.is_visible())
         if login_btn.count() > 0:
             login_btn.click()
-            login_with_github_btn = page.get_by_role(role='button', name=' 继续使用 Github 登录')
+            login_with_github_btn = page.get_by_role(role='button', name='继续使用 Github 登录')
             login_with_github_btn.click()
             username_or_email_input = page.get_by_label('Username or email address')
             password_input = page.get_by_label('Password')
@@ -86,9 +86,9 @@ with sync_playwright() as p:
     - 注意事项：不要出现奇怪结构、AI 特有的扭曲、重复元素或乱码文字
     """
 
-    send_btn = page.locator('#send-message-button')
-
+    send_btn = page.locator('.send-button')
     desc_input.fill(prompt)
+    send_btn.click()
 
     while True:
         with page.expect_request('https://cdn.qwenlm.ai/output/**') as img:
