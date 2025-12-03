@@ -19,7 +19,7 @@ with open(note_path, 'r', encoding='utf-8') as f:
 # print(note_content)
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=False)
 
     if Path(storage_file).exists():
         print('已登录，无需输入用户名和密码')
@@ -62,8 +62,10 @@ with sync_playwright() as p:
 
     one_and_one_btn = page.get_by_text('1:1')
     one_and_one_btn.click()
+    time.sleep(0.5)
     nine_and_sixteen_btn = page.get_by_text('9:16')
     nine_and_sixteen_btn.click()
+    time.sleep(0.5)
 
     desc_input = page.get_by_placeholder('描述你想要生成的图像。')
 
