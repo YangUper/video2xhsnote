@@ -19,7 +19,7 @@ with open(note_path, 'r', encoding='utf-8') as f:
 # print(note_content)
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
+    browser = p.chromium.launch()
 
     if Path(storage_file).exists():
         print('已登录，无需输入用户名和密码')
