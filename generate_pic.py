@@ -88,7 +88,6 @@ with sync_playwright() as p:
 
     send_btn = page.locator('.send-button')
     desc_input.fill(prompt)
-    send_btn.click()
 
     while True:
         with page.expect_request('https://cdn.qwenlm.ai/output/**') as img:
